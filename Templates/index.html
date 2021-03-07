@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <title>ENGO 551 Lab 3</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+
+<style>
+      #map {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+</style>
+
+  </head>
+    <body>
+
+          <div id="map"></div>
+
+<script>
+
+//Initialize map, set view to center of calgary if location permissions //denied
+var map = L.map('map').setView([51.044, -114.07],11);
+map.locate({setView: true, maxZoom: 11});
+// Add fullscreen control
+map.addControl(new L.Control.Fullscreen());
+
+//Add base tilelayer to map
+var original = L.tileLayer('https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    username: '{{ info[0] }}',
+    style_id: '{{ info[2] }}',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: '{{ info[3] }}'
+}).addTo(map);
+
+//Add tilelayer w/ traffic dataset
+var streets = L.tileLayer('https://api.mapbox.com/styles/v1/{username}/{style_id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    username: '{{ info[0] }}',
+    style_id: '{{ info[1] }}',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: '{{ info[3] }}'
+});
+
+var baseMaps = {
+"Map": original,
+"Traffic Incidents": streets
+};
+
+var layerscontrol = L.control.layers(baseMaps).addTo(map);
+
+
+  </script>
+
+  </body>
+</html>
