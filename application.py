@@ -10,8 +10,8 @@ import requests
 app = Flask(__name__)
 
 # Check for environment variable
-#if not os.getenv("DATABASE_URL"):
-#    raise RuntimeError("DATABASE_URL is not set")
+if not os.getenv("DATABASE_URL"):
+    raise RuntimeError("DATABASE_URL is not set")
 
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
@@ -19,8 +19,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-#engine = create_engine(os.getenv("DATABASE_URL"))
-#db = scoped_session(sessionmaker(bind=engine))
+engine = create_engine(os.getenv("DATABASE_URL"))
+db = scoped_session(sessionmaker(bind=engine))
 
 
 @app.route("/")
@@ -37,4 +37,12 @@ def home():
     info.append(style_id2)
     info.append(accessToken)
 
-    return render_template("index.html", info=info)
+    schools = db.execute("SELECT * FROM schools").fetchall()
+
+    hospitals = db.execute("SELECT * FROM hospitals").fetchall()
+
+
+    #json for schools
+    # https://data.calgary.ca/api/views/64t2-ax4d/rows.json?accessType=DOWNLOAD
+
+    return render_template("index.html", schools=schools, hospitals=hospitals)
