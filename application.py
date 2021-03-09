@@ -25,24 +25,9 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def home():
-    #mapbox info
-    username = 'mitchellbrown98'
-    style_id = 'ckkcvultf02pt17o521x7072r'
-    style_id2 = 'cklwsiu2911ov17nsiiywum05'
-    accessToken = 'pk.eyJ1IjoibWl0Y2hlbGxicm93bjk4IiwiYSI6ImNra2N2cjB5NTAwYnQybm91OHFpanQ2b2sifQ.sWLC8sV-m3qg2cvANpey0w'
-
-    info=[]
-    info.append(username)
-    info.append(style_id)
-    info.append(style_id2)
-    info.append(accessToken)
 
     schools = db.execute("SELECT * FROM schools").fetchall()
 
     hospitals = db.execute("SELECT * FROM hospitals").fetchall()
-
-
-    #json for schools
-    # https://data.calgary.ca/api/views/64t2-ax4d/rows.json?accessType=DOWNLOAD
 
     return render_template("index.html", schools=schools, hospitals=hospitals)

@@ -1,26 +1,36 @@
-application.py:
+**application.py:**
 There is only 1 route needed for this lab
 
 1. `@app.route("/")` 
-	- This route passes the username, style_ids, and access token for the Mapbox tile layers, and renders the index.html page.
+	- This route queries the database for all of the schools and all of the hospitals and clinics, and passes them to the index.html page
+	
+	-     schools = db.execute("SELECT * FROM schools").fetchall()
+	      
+	      hospitals = db.execute("SELECT * FROM hospitals").fetchall()
 	
 
-`Index.html:`
+**import.py:**
 
-- This page contains an edited mapbox tile layer without the traffic dataset, which is initially seen when you load the page. ![](https://github.com/mitchellbrown98/ENGO551Lab3/blob/main/screenshots/2021-03-05_14h30_31.png)
+- This file was used to import hospitals.csv and schools.csv into my database. 
 
-- You have the ability to toggle between the tile layer without the dataset, or the one with the dataset with this popup:
 
-  ![](https://github.com/mitchellbrown98/ENGO551Lab3/blob/main/screenshots/2021-03-05_14h30_41.png) 
 
-  Both were created in mapbox studio. You can also enter full screen mode with this button:
+**Index.html:**
 
-  ![](https://github.com/mitchellbrown98/ENGO551Lab3/blob/main/screenshots/2021-03-05_14h07_02.png)
+- This page contains the Mapbox light-v10 style map, and is centered on Calgary. All schools and hospitals/clinics are loaded in (as 2 separate layers). Schools are represented by a graduation cap icon, and the hospitals and clinics are represented by a cross:
 
-- For this lab, the focus is on the traffic points and roadways they occur on, so the map background has been darkened, along with the green features, water ports, airports, pedestrian roadways, etc as they are not as relevant. The labels have been updated as well for ease of viewing with the dark background.
+  ![](https://github.com/mitchellbrown98/ENGO551Lab4/blob/main/screenshots/2021-03-09_13h09_24.png)
 
-- Orange greatly contrasts with green, so I have made the traffic points orange, on top of the various green roadways to ensure they easily stand out.![](https://github.com/mitchellbrown98/ENGO551Lab3/blob/main/screenshots/2021-03-05_14h06_52.png)
+- When you hover your mouse over an icon, the feature's name and address will be displayed in a styled popup:
 
-- I chose a radius of 4px for the traffic points, as that size will fit inside the roadway when you are zoomed into the map. The points will also adjust their size based on the zoom layer, so it is easy to see where they are grouped together when you zoom out, but can be easily identified and differentiated when you zoom in. I chose to use no blur, and full opacity so the points appear sharp and easily stand out.
+  ![](https://github.com/mitchellbrown98/ENGO551Lab4/blob/main/screenshots/2021-03-09_13h09_39.png) ![](https://github.com/mitchellbrown98/ENGO551Lab4/blob/main/screenshots/2021-03-09_13h09_50.png) 
 
-- I chose to include the natural features, place labels, point of interest labels, road networks, terrain, transit, and walking & cycling components as these can aid in the visualization and correlation of the traffic incident dataset. 
+  When you move your mouse off of the icon, the popup will close by itself.
+
+- When you click on a hospital/clinic icon, nothing will happen. When you click on a school icon, `turf.nearest()` is used to find the closest hospital feature, and `turf.distance()` is used to find the distance (in km) between the school and the nearest hospital. The nearest hospital will be marked with a green circle behind the icon. Additionally, a modal popup will appear that displays the 'From' school name and address, the 'To' hospital/clinic name and address, and the distance between the two features. The modal can be closed by clicking the 'x' in the top right corner, or by clicking anywhere off the modal:
+
+  ![](https://github.com/mitchellbrown98/ENGO551Lab4/blob/main/screenshots/2021-03-09_13h10_00.png)
+
+- Clicking on another school will remove the green mark from the old hospital, place it on the new nearest hospital, and re-open the modal with the newly updated information:
+
+  ![](https://github.com/mitchellbrown98/ENGO551Lab4/blob/main/screenshots/2021-03-09_13h10_20.png)

@@ -1,7 +1,0 @@
-1. add C:\Users\Mitchell Brown\AppData\Local\Programs\Python\Python39\Scripts to PATH
-2. go to directory, run py -m pip install -U pip
-3. set FLASK_APP=application.py
-4. set FLASK_DEBUG=1
-5. set DATABASE_URL=postgres://nchktprwfkcsft:cfb2627d3c6fa6c9ba947539605df51858775532eae09fb65fa61dbaf36d02a9@ec2-54-198-252-9.compute-1.amazonaws.com:5432/d8lojdc2ophhqj
-6. flask run
-7. or  (to use on multiple device)
