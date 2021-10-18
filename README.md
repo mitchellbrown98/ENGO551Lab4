@@ -1,5 +1,7 @@
+In this project, I am using Turf.js to add spatial analysis to a web mapping application. I have made a a map of Calgary Schools and Calgary Health Clinics and Hospitals. When a user clicks on a school, the map will show which clinic or hospital is nearest.
+
 **application.py:**
-There is only 1 route needed for this lab
+There is only 1 route needed for this project
 
 1. `@app.route("/")` 
 	- This route queries the database for all of the schools and all of the hospitals and clinics, and passes them to the index.html page
